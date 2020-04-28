@@ -59,6 +59,11 @@ namespace CSharpExtensions.Analyzers
             var objectCreation = (ObjectCreationExpressionSyntax)context.Node;
             var typeInfo = context.SemanticModel.GetSymbolInfo(objectCreation.Type);
 
+            if (objectCreation.ArgumentList?.Arguments.Count > 0)
+            {
+                return;
+            }
+
             if (typeInfo.Symbol is ITypeSymbol type)
             {
                 var membersForInitialization = GetMembersForRequiredInit(type, objectCreation, context.SemanticModel).Select(x => x.Name).ToImmutableHashSet();
